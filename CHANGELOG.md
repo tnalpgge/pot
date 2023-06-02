@@ -4,6 +4,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
 
+## [Unreleased]
+### Added
+- create: Honor netmask/prefix length for alias addresses (#268)
+- stop: Handle netmask/prefix length during address cleanup (#268)
+
 ## [0.15.6] 2023-09-29
 ### Added
 - start: Add custom pf rule configuration hook, POT_EXPORT_PORTS_PF_RULES_HOOK (#273)
