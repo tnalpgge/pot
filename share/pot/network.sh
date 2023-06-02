@@ -207,7 +207,7 @@ _get_pot_network_stack()
 # $2 ipaddr
 _get_alias_ipv4()
 {
-	local _i _ip _nic _output
+	local _i _ip _nic _output _netmask
 	_output=
 	if [ "$( _get_pot_network_stack "$1" )" != "ipv6" ]; then
 		for _i in $2 ; do
@@ -218,11 +218,20 @@ _get_alias_ipv4()
 				_nic="$POT_EXTIF"
 				_ip="$_i"
 			fi
+			if echo "$_ip" | grep -qF '/' ; then
+				_netmask="$( echo "$_ip" | cut -f 2 -d '/' )"
+				_ip="$( echo "$_ip" | cut -f 1 -d '/' )"
+			else
+				_netmask=""
+			fi
 			if potnet ip4check -H "$_ip" 2> /dev/null ; then
 				if [ -z "$_output" ]; then
 					_output="$_nic|$_ip"
 				else
 					_output="$_output,$_nic|$_ip"
+				fi
+				if [ -n "$_netmask" ]; then
+					_output="$_output/$_netmask"
 				fi
 			fi
 		done
