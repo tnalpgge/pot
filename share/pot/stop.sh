@@ -75,6 +75,10 @@ _js_stop()
 				_nic="$POT_EXTIF"
 				_ipaddr="$_i"
 			fi
+			if echo "$_ipaddr" | grep -qF '/' ; then
+				_netmask="$(echo "$_ipaddr" | cut -f 2 -d '/' )"
+				_ipaddr="$(echo "$_ipaddr" | cut -f 1 -d '/' )"
+			fi
 			if potnet ip4check -H "$_ipaddr" ; then
 				if ifconfig "${_nic}" | grep -q "inet $_ipaddr " ; then
 					ifconfig "${_nic}" inet "$_ipaddr" -alias

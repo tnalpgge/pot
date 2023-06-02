@@ -279,7 +279,7 @@ _get_alias_ipv6()
 # $2 network stack
 _validate_alias_ipaddr()
 {
-	local _i _nic _ip _ipv4_empty _ipv6_empty _stack
+	local _i _nic _ip _ipv4_empty _ipv6_empty _stack _netmask
 	_stack="$2"
 	_ipv4_empty="YES"
 	_ipv6_empty="YES"
@@ -293,6 +293,12 @@ _validate_alias_ipaddr()
 			fi
 		else
 			_ip="$_i"
+		fi
+		if echo "$_ip" | grep -qF '/' ; then
+			_netmask="$( echo "$_ip" | cut -f 2 -d '/' )"
+			_ip="$( echo "$_ip" | cut -f 1 -d '/' )"
+		else
+			_netmask=""
 		fi
 		if ! potnet ipcheck -H "$_ip" 2> /dev/null ; then
 			_error "$_ip is not a valid IP address"
